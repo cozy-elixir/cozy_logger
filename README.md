@@ -1,8 +1,6 @@
 # CozyLogger
 
-[![CI](https://github.com/cozy-elixir/cozy_logger/actions/workflows/ci.yml/badge.svg)](https://github.com/cozy-elixir/cozy_logger/actions/workflows/ci.yml)
-
-[![Hex.pm](https://img.shields.io/hexpm/v/cozy_logger.svg)](https://hex.pm/packages/cozy_logger)
+[![CI](https://github.com/cozy-elixir/cozy_logger/actions/workflows/ci.yml/badge.svg)](https://github.com/cozy-elixir/cozy_logger/actions/workflows/ci.yml) [![Hex.pm](https://img.shields.io/hexpm/v/cozy_logger.svg)](https://hex.pm/packages/cozy_logger)
 
 <!-- MDOC -->
 
