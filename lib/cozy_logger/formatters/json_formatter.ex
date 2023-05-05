@@ -28,7 +28,8 @@ defmodule CozyLogger.JsonFormatter do
     :initial_call,
     :mfa,
     :report_cb,
-    :ansi_color
+    :ansi_color,
+    :conn
   ]
 
   alias Logger.Formatter
