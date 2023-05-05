@@ -84,10 +84,8 @@ defmodule CozyLogger.JsonFormatter do
   end
 
   defp hostname() do
-    case :inet.gethostname() do
-      {:ok, hostname} -> to_string(hostname)
-      _ -> nil
-    end
+    {:ok, hostname} = :inet.gethostname()
+    to_string(hostname)
   end
 
   defp exclude_keys(attrs) do
