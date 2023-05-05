@@ -28,7 +28,9 @@ if Code.ensure_loaded?(Phoenix) do
           use Application
 
           def start(_type, _args) do
-            #{inspect(__MODULE__)}.install()
+            unless Application.fetch_env!(:phoenix, :logger) do
+              #{inspect(__MODULE__)}.install()
+            end
 
             children = [
               # ...
