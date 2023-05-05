@@ -18,6 +18,19 @@ defmodule CozyLogger.JsonFormatter do
 
   """
 
+  @exclude_metadata_keys [
+    :erl_level,
+    :gl,
+    :pid,
+    :time,
+    :crash_reason,
+    :error_logger,
+    :initial_call,
+    :mfa,
+    :report_cb,
+    :ansi_color
+  ]
+
   alias Logger.Formatter
 
   @spec format(atom, term, Logger.Formatter.time(), keyword()) :: IO.chardata()
@@ -76,21 +89,8 @@ defmodule CozyLogger.JsonFormatter do
     end
   end
 
-  @exclude_keys [
-    :erl_level,
-    :gl,
-    :pid,
-    :time,
-    :crash_reason,
-    :error_logger,
-    :initial_call,
-    :mfa,
-    :report_cb,
-    :ansi_color
-  ]
-
   defp exclude_keys(attrs) do
-    Map.drop(attrs, @exclude_keys)
+    Map.drop(attrs, @exclude_metadata_keys)
   end
 
   # Encoding a term to JSON.
