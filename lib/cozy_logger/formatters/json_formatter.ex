@@ -1,6 +1,6 @@
 defmodule CozyLogger.JsonFormatter do
   @moduledoc """
-  A JSON formatter for Elixir builtin console backends.
+  A JSON formatter for Elixir built-in console backend.
 
   ## Usage
 
