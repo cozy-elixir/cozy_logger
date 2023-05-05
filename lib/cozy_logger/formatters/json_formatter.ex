@@ -42,6 +42,7 @@ defmodule CozyLogger.JsonFormatter do
     |> append_hostname()
     |> exclude_keys()
     |> encode!()
+    |> append_new_line()
   rescue
     # This function must not fail. If it does, it will bring that particular logger instance down,
     # causing the system to temporarily lose log messages.
@@ -50,6 +51,7 @@ defmodule CozyLogger.JsonFormatter do
 
       build_base_attrs(:error, message, timestamp)
       |> encode!()
+      |> append_new_line()
   end
 
   defp build_base_attrs(level, message, timestamp) do
@@ -130,5 +132,9 @@ defmodule CozyLogger.JsonFormatter do
 
   defp encode_value(value) do
     value
+  end
+
+  defp append_new_line(iodata) do
+    [iodata, ?\n]
   end
 end
