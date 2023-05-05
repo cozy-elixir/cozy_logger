@@ -1,18 +1,8 @@
 defmodule CozyLogger do
-  @moduledoc """
-  Documentation for `CozyLogger`.
-  """
+  @external_resource "README.md"
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> CozyLogger.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
+  @moduledoc "README.md"
+             |> File.read!()
+             |> String.split("<!-- MDOC -->")
+             |> Enum.fetch!(1)
 end

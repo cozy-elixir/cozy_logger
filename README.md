@@ -1,6 +1,8 @@
 # CozyLogger
 
-> Logging helpers, providing various formatters and seamless integrations with other libraries.
+<!-- MDOC -->
+
+Logging helpers, providing various formatters and seamless integrations with other libraries.
 
 ## Features
 
@@ -14,16 +16,19 @@
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `cozy_logger` to your list of dependencies in `mix.exs`:
+Add `package_name` to the list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:cozy_logger, "~> 0.1.0"}
+    {:cozy_logger, "~> <version>"}
   ]
 end
 ```
+
+## Usage
+
+For more information, see the [documentation](https://hexdocs.pm/cozy_logger).
 
 ## About the design
 
