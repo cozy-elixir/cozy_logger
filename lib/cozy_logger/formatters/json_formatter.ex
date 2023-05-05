@@ -41,7 +41,7 @@ defmodule CozyLogger.JsonFormatter do
     |> append_metadata(metadata)
     |> append_hostname()
     |> exclude_keys()
-    |> encode!(pretty: true)
+    |> encode!()
   rescue
     # This function must not fail. If it does, it will bring that particular logger instance down,
     # causing the system to temporarily lose log messages.
@@ -49,7 +49,7 @@ defmodule CozyLogger.JsonFormatter do
       message = "could not format: #{inspect({level, message, metadata})}"
 
       build_base_attrs(:error, message, timestamp)
-      |> encode!(pretty: true)
+      |> encode!()
   end
 
   defp build_base_attrs(level, message, timestamp) do
