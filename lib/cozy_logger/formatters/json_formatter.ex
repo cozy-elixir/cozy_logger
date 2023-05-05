@@ -4,8 +4,11 @@ defmodule CozyLogger.JsonFormatter do
 
   ## Usage
 
-      # use Elixir built-in console backend
-      config :logger, backends: [:console]
+      # use Elixir built-in console backend, and configure other necessary options
+      config :logger,
+        backends: [:console],
+        truncate: :infinity,
+        utc_log: true
 
       # use this formatter
       config :logger, :console,
