@@ -33,7 +33,7 @@ defmodule CozyLogger.MixProject do
     [
       {:telemetry, ">= 0.0.0"},
       {:jason, ">= 0.0.0"},
-      {:plug, ">= 0.0.0", optional: true},
+      {:plug, ">= 0.0.0"},
       {:phoenix, ">= 0.0.0", optional: true},
       {:ex_check, "~> 0.15.0", only: [:dev], runtime: false},
       {:credo, ">= 0.0.0", only: [:dev], runtime: false},
