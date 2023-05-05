@@ -9,7 +9,7 @@ defmodule CozyLogger.MixProject do
     [
       app: :cozy_logger,
       version: @version,
-      elixir: "~> 1.14",
+      elixir: "~> 1.12",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: @description,
@@ -32,7 +32,13 @@ defmodule CozyLogger.MixProject do
   defp deps do
     [
       {:jason, ">= 0.0.0"},
-      {:phoenix, ">= 0.0.0", only: [:test]}
+      {:phoenix, ">= 0.0.0", only: [:test]},
+      {:ex_check, "~> 0.15.0", only: [:dev], runtime: false},
+      {:credo, ">= 0.0.0", only: [:dev], runtime: false},
+      {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
+      {:doctor, ">= 0.0.0", only: [:dev], runtime: false},
+      {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
+      {:mix_audit, ">= 0.0.0", only: [:dev], runtime: false}
     ]
   end
 
