@@ -22,7 +22,7 @@ defmodule CozyLogger.MixProject do
   defp deps do
     [
       {:jason, ">= 0.0.0"},
-      {:plug, ">= 0.0.0"}
+      {:phoenix, ">= 0.0.0", only: [:test]}
     ]
   end
 end
