@@ -171,7 +171,7 @@ if Code.ensure_loaded?(Phoenix) do
 
     defp request_path(%Conn{script_name: script_name, path_info: path_info})
          when is_list(script_name) do
-      "/" <> Path.join(script_name ++ path_info)
+      "/" <> Enum.join(script_name ++ path_info, "/")
     end
 
     defp request_path(%Conn{request_path: request_path}), do: request_path
