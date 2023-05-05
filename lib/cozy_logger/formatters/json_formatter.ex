@@ -22,7 +22,8 @@ defmodule CozyLogger.JsonFormatter do
 
   @spec format(atom, term, Logger.Formatter.time(), keyword()) :: IO.chardata()
   def format(level, message, timestamp, metadata) do
-    build_base(level, message, timestamp)
+    build_base_attrs(level, message, timestamp)
+    |> append_source_location(metadata)
     |> append_metadata(metadata)
     |> append_hostname()
     |> exclude_keys()
@@ -33,11 +34,11 @@ defmodule CozyLogger.JsonFormatter do
     _ ->
       message = "could not format: #{inspect({level, message, metadata})}"
 
-      build_base(:error, message, timestamp)
+      build_base_attrs(:error, message, timestamp)
       |> encode!(pretty: true)
   end
 
-  defp build_base(level, message, timestamp) do
+  defp build_base_attrs(level, message, timestamp) do
     %{
       level: level,
       message: to_string(message),
@@ -49,14 +50,23 @@ defmodule CozyLogger.JsonFormatter do
     to_string([Formatter.format_date(date), ?T, Formatter.format_time(time), ?Z])
   end
 
-  defp append_metadata(map, metadata) do
-    Enum.reduce(metadata, map, fn {key, value}, acc ->
+  defp append_source_location(attrs, metadata) do
+    Map.merge(attrs, %{
+      file: metadata[:file],
+      module: metadata[:module],
+      function: metadata[:function],
+      line: metadata[:line]
+    })
+  end
+
+  defp append_metadata(attrs, metadata) do
+    Enum.reduce(metadata, attrs, fn {key, value}, acc ->
       Map.put_new(acc, key, value)
     end)
   end
 
-  defp append_hostname(map) do
-    Map.put(map, :hostname, hostname())
+  defp append_hostname(attrs) do
+    Map.put(attrs, :hostname, hostname())
   end
 
   defp hostname() do
@@ -68,13 +78,19 @@ defmodule CozyLogger.JsonFormatter do
 
   @exclude_keys [
     :erl_level,
+    :gl,
+    :pid,
     :time,
     :crash_reason,
-    :error_logger
+    :error_logger,
+    :initial_call,
+    :mfa,
+    :report_cb,
+    :ansi_color
   ]
 
-  defp exclude_keys(map) do
-    Map.drop(map, @exclude_keys)
+  defp exclude_keys(attrs) do
+    Map.drop(attrs, @exclude_keys)
   end
 
   # Encoding a term to JSON.
