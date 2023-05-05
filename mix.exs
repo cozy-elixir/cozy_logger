@@ -31,6 +31,7 @@ defmodule CozyLogger.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:telemetry, ">= 0.0.0"},
       {:jason, ">= 0.0.0"},
       {:phoenix, ">= 0.0.0", optional: true},
       {:ex_check, "~> 0.15.0", only: [:dev], runtime: false},
