@@ -156,7 +156,8 @@ if Code.ensure_loaded?(Phoenix) do
         status_code: status_code(conn),
         user_agent: user_agent(conn),
         referer: referer(conn),
-        remote_ip: remote_ip(conn)
+        remote_ip: remote_ip(conn),
+        error_reason: error_reason(conn)
       }
       |> Map.merge(extras)
     end
@@ -194,6 +195,12 @@ if Code.ensure_loaded?(Phoenix) do
         to_string(:inet_parse.ntoa(conn.remote_ip))
       end
     end
+
+    defp error_reason(%Conn{assigns: %{kind: kind, reason: reason, stack: stack}}) do
+      Exception.format(kind, reason, stack)
+    end
+
+    defp error_reason(%Conn{}), do: nil
 
     defp to_nanoseconds(duration) do
       System.convert_time_unit(duration, :native, :nanosecond)
