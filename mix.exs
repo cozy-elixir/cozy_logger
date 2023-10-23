@@ -1,7 +1,7 @@
 defmodule CozyLogger.MixProject do
   use Mix.Project
 
-  @version "0.4.1"
+  @version "1.0.0"
   @description "Logging helpers, providing various formatters and seamless integrations with other libraries."
   @source_url "https://github.com/cozy-elixir/cozy_logger"
 
@@ -9,7 +9,7 @@ defmodule CozyLogger.MixProject do
     [
       app: :cozy_logger,
       version: @version,
-      elixir: "~> 1.12",
+      elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: @description,
