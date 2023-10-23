@@ -28,7 +28,7 @@ For more information, see the [documentation](https://hexdocs.pm/cozy_logger).
 
 ## About the design
 
-- The **formats** are only responsible for formatting, they do not handle any vendor-specific formats.
+- The **formats** are only responsible for formatting, and they do not handle any vendor-specific formats.
 - The **integrations** process telemetry events to print logs, and provide `install/0` or `install/1` functions for convenient initialization.
 
 ## License
