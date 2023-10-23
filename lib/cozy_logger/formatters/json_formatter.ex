@@ -4,13 +4,25 @@ defmodule CozyLogger.JsonFormatter do
 
   ## Usage
 
+  Elixir v1.15 or later:
+
+      # customize format message with this formatter.
+      config :logger, :default_formatter,
+        format: {CozyLogger.JsonFormatter, :format},
+        metadata: :all,
+        colors: [enabled: false],
+        truncate: :infinity,
+        utc_log: true
+
+  Prior to Elixir v1.15:
+
       # use Elixir built-in console backend, and configure other necessary options
       config :logger,
         backends: [:console],
         truncate: :infinity,
         utc_log: true
 
-      # use this formatter
+      # customize format message with this formatter.
       config :logger, :console,
         format: {CozyLogger.JsonFormatter, :format},
         metadata: :all,
