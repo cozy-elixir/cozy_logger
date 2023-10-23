@@ -10,14 +10,16 @@ if is_old_elixir? do
 
   # use log formatter provided by CozyLogger
   config :logger, :console,
-    format: {CozyLogger.JsonFormatter, :format},
+    format: {CozyLogger.JSON, :format},
+    truncate: :infinity,
+    utc_log: true,
     metadata: :all,
-    colors: [enabled: false],
-    utc_log: true
+    colors: [enabled: false]
 else
   config :logger, :default_formatter,
-    format: {CozyLogger.JsonFormatter, :format},
+    format: {CozyLogger.JSON, :format},
+    truncate: :infinity,
+    utc_log: true,
     metadata: :all,
-    colors: [enabled: false],
-    utc_log: true
+    colors: [enabled: false]
 end

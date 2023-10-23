@@ -1,7 +1,7 @@
-defmodule CozyLogger.JsonFormatterTest do
+defmodule CozyLogger.JSONTest do
   use ExUnit.Case, async: true
 
-  alias CozyLogger.JsonFormatter
+  alias CozyLogger.JSON
 
   defmodule TestStruct do
     defstruct [:field]
@@ -9,7 +9,7 @@ defmodule CozyLogger.JsonFormatterTest do
 
   defp encode_as_string!(value) do
     value
-    |> JsonFormatter.encode!()
+    |> JSON.encode!()
     |> to_string()
   end
 
