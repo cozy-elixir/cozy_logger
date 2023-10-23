@@ -46,7 +46,11 @@ defmodule CozyLogger.JSON do
 
   alias Logger.Formatter
 
-  @spec format(atom, term, Logger.Formatter.time(), keyword()) :: IO.chardata()
+  @type date :: {1970..10_000, 1..12, 1..31}
+  @type time_ms :: {0..23, 0..59, 0..59, 0..999}
+  @type date_time_ms :: {date, time_ms}
+
+  @spec format(atom, term, date_time_ms, keyword) :: IO.chardata()
   def format(level, message, timestamp, metadata) do
     build_base_attrs(level, message, timestamp)
     |> append_source_location(metadata)
