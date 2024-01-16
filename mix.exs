@@ -2,14 +2,14 @@ defmodule CozyLogger.MixProject do
   use Mix.Project
 
   @version "1.0.0"
-  @description "Logging helpers, providing various formatters and seamless integrations with other libraries."
+  @description "Logging helpers, providing format functions of various formats and seamless integrations with other libraries."
   @source_url "https://github.com/cozy-elixir/cozy_logger"
 
   def project do
     [
       app: :cozy_logger,
       version: @version,
-      elixir: "~> 1.13",
+      elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       description: @description,
@@ -38,7 +38,6 @@ defmodule CozyLogger.MixProject do
       {:ex_check, "~> 0.15.0", only: [:dev], runtime: false},
       {:credo, ">= 0.0.0", only: [:dev], runtime: false},
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
-      {:doctor, ">= 0.0.0", only: [:dev], runtime: false},
       {:ex_doc, ">= 0.0.0", only: [:dev], runtime: false},
       {:mix_audit, ">= 0.0.0", only: [:dev], runtime: false}
     ]
@@ -49,13 +48,12 @@ defmodule CozyLogger.MixProject do
       extras: ["README.md"],
       main: "readme",
       source_url: @source_url,
-      source_ref: @version
+      source_ref: "v#{@version}"
     ]
   end
 
   defp package do
     [
-      exclude_patterns: [],
       licenses: ["Apache-2.0"],
       links: %{GitHub: @source_url}
     ]
@@ -66,8 +64,8 @@ defmodule CozyLogger.MixProject do
   end
 
   defp tag_release(_) do
-    Mix.shell().info("Tagging release as #{@version}")
-    System.cmd("git", ["tag", @version])
+    Mix.shell().info("Tagging release as v#{@version}")
+    System.cmd("git", ["tag", "v#{@version}"])
     System.cmd("git", ["push", "--tags"])
   end
 end

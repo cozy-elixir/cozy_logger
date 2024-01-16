@@ -15,6 +15,23 @@
         devShells.default = with pkgs; mkShell {
           packages = [
             beam.packages.erlang_26.elixir_1_15
+          ] ++
+          # Linux only
+          lib.optionals stdenv.isLinux [
+            # for ExUnit notifier
+            libnotify
+
+            # for package - file_system
+            inotify-tools
+          ] ++
+          # Darwin only
+          lib.optionals stdenv.isDarwin [
+            # for ExUnit notifier
+            terminal-notifier
+
+            # for package - file_system
+            darwin.apple_sdk.frameworks.CoreFoundation
+            darwin.apple_sdk.frameworks.CoreServices
           ];
 
           shellHook = ''
