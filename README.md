@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/cozy-elixir/cozy_logger/actions/workflows/ci.yml/badge.svg)](https://github.com/cozy-elixir/cozy_logger/actions/workflows/ci.yml)
 [![Hex.pm](https://img.shields.io/hexpm/v/cozy_logger.svg)](https://hex.pm/packages/cozy_logger)
-[![built with Nix](https://img.shields.io/badge/built%20with%20Nix-5277C3?logo=nixos&logoColor=white)](https://builtwithnix.org)
 
 <!-- MDOC -->
 
