@@ -4,27 +4,11 @@ defmodule CozyLogger.JSON do
 
   ## Usage
 
-  Elixir v1.15 or later:
-
       # customize format message with this formatter.
       config :logger, :default_formatter,
         format: {#{inspect(__MODULE__)}, :format},
         truncate: :infinity,
         utc_log: true,
-        metadata: :all,
-        colors: [enabled: false]
-
-  Prior to Elixir v1.15:
-
-      # use Elixir built-in console backend, and configure other necessary options
-      config :logger,
-        backends: [:console],
-        truncate: :infinity,
-        utc_log: true
-
-      # customize format message with this formatter.
-      config :logger, :console,
-        format: {#{inspect(__MODULE__)}, :format},
         metadata: :all,
         colors: [enabled: false]
 
@@ -46,16 +30,7 @@ defmodule CozyLogger.JSON do
 
   alias Logger.Formatter
 
-  # credo:disable-for-next-line
-  # TODO: remove these types when no longer supporting versions prior to v1.15
-  @type date :: {1970..10_000, 1..12, 1..31}
-  @type time_ms :: {0..23, 0..59, 0..59, 0..999}
-  @type date_time_ms :: {date, time_ms}
-
-  # credo:disable-for-next-line
-  # TODO: replace date_time_ms with Logger.Formatter.date_time_ms() when no longer
-  # supporting versions prior to v1.15
-  @spec format(atom, term, date_time_ms, keyword) :: IO.chardata()
+  @spec format(atom, term, Logger.Formatter.date_time_ms(), keyword) :: IO.chardata()
   def format(level, message, timestamp, metadata) do
     build_base_attrs(level, message, timestamp)
     |> append_source_location(metadata)
