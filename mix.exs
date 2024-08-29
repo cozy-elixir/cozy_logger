@@ -33,8 +33,9 @@ defmodule CozyLogger.MixProject do
     [
       {:telemetry, ">= 0.0.0"},
       {:jason, ">= 0.0.0"},
-      {:plug, ">= 0.0.0"},
+      {:plug, ">= 0.0.0", optional: true},
       {:phoenix, ">= 0.0.0", optional: true},
+      {:oban, ">= 0.0.0", optional: true},
       {:ex_check, ">= 0.0.0", only: [:dev], runtime: false},
       {:credo, ">= 0.0.0", only: [:dev], runtime: false},
       {:dialyxir, ">= 0.0.0", only: [:dev], runtime: false},
