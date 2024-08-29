@@ -22,7 +22,7 @@ defmodule CozyLogger.Formats.JSON do
     |> append_source()
     |> append_metadata()
     |> append_hostname()
-    |> encode!(pretty: true)
+    |> encode!()
     |> append_new_line()
   rescue
     # This function must not fail. If it does, it will bring that particular logger instance down,
