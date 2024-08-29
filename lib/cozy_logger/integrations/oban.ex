@@ -11,7 +11,7 @@ if Code.ensure_loaded?(Oban) do
           use Application
 
           def start(_type, _args) do
-            #{inspect(__MODULE__)}.install()
+            :ok = #{inspect(__MODULE__)}.install()
 
             children = [
               # ...

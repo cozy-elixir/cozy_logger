@@ -30,7 +30,7 @@ if Code.ensure_loaded?(Phoenix) do
 
           def start(_type, _args) do
             unless Application.fetch_env!(:phoenix, :logger) do
-              #{inspect(__MODULE__)}.install()
+              :ok = #{inspect(__MODULE__)}.install()
             end
 
             children = [
