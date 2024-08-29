@@ -1,7 +1,7 @@
 defmodule CozyLogger.MixProject do
   use Mix.Project
 
-  @version "2.0.0"
+  @version "2.0.1"
   @description "Logger helpers, providing format functions of various formats and seamless integrations with other libraries."
   @source_url "https://github.com/cozy-elixir/cozy_logger"
 
