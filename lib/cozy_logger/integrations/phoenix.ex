@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(Phoenix) do
-  defmodule CozyLogger.PhoenixIntegration do
+  defmodule CozyLogger.Integrations.Phoenix do
     @moduledoc """
     `CozyLogger` integration for `Phoenix`.
 
@@ -13,6 +13,7 @@ if Code.ensure_loaded?(Phoenix) do
       * `[:phoenix, :socket_connected]`
       * `[:phoenix, :channel_joined]`
       * `[:phoenix, :channel_handled_in]`
+      * ...
 
     `Phoenix.Logger`(the default logger) handles these events, and print logs accordingly.
 
@@ -95,27 +96,26 @@ if Code.ensure_loaded?(Phoenix) do
     alias Plug.Conn
     alias __MODULE__.Params
 
+    @events [
+      [:phoenix, :endpoint, :stop]
+    ]
+
     def install(opts \\ []) do
-      handlers = %{
-        [:phoenix, :endpoint, :stop] => &__MODULE__.phoenix_endpoint_stop/4
-      }
-
-      config = opts
-
-      for {key, fun} <- handlers do
-        :telemetry.attach({__MODULE__, key}, key, fun, config)
-      end
+      config = Enum.into(opts, %{})
+      :telemetry.attach_many(__MODULE__, @events, &__MODULE__.handle_event/4, config)
     end
 
-    defp log_level(nil, _conn), do: :info
-    defp log_level(level, _conn) when is_atom(level), do: level
-
-    defp log_level({mod, fun, args}, conn) when is_atom(mod) and is_atom(fun) and is_list(args) do
-      apply(mod, fun, [conn | args])
+    def uninstall do
+      :telemetry.detach(__MODULE__)
     end
 
     @doc false
-    def phoenix_endpoint_stop(_, %{duration: duration}, %{conn: conn} = metadata, config) do
+    def handle_event(
+          [:phoenix, :endpoint, :stop],
+          %{duration: duration},
+          %{conn: conn} = metadata,
+          config
+        ) do
       case log_level(metadata[:options][:log], conn) do
         false ->
           :ok
@@ -157,7 +157,7 @@ if Code.ensure_loaded?(Phoenix) do
         params: params(conn, params_filter_fields),
         status_code: status_code(conn),
         user_agent: user_agent(conn),
-        referer: referer(conn),
+        referrer: referrer(conn),
         remote_ip: remote_ip(conn),
         error_reason: error_reason(conn)
       }
@@ -185,21 +185,23 @@ if Code.ensure_loaded?(Phoenix) do
 
     defp user_agent(%Conn{} = conn), do: get_header(conn, "user-agent")
 
-    defp referer(%Conn{} = conn), do: get_header(conn, "referer")
+    defp referrer(%Conn{} = conn), do: get_header(conn, "referer")
 
     defp remote_ip(%Conn{} = conn) do
       if header_value = get_header(conn, "x-forwarded-for") do
         header_value
-        |> String.split(",")
+        |> String.split(",", parts: 2)
         |> hd()
         |> String.trim()
       else
-        to_string(:inet_parse.ntoa(conn.remote_ip))
+        conn.remote_ip
+        |> :inet_parse.ntoa()
+        |> to_string()
       end
     end
 
-    defp error_reason(%Conn{assigns: %{kind: kind, reason: reason, stack: stack}}) do
-      Exception.format(kind, reason, stack)
+    defp error_reason(%Conn{assigns: %{kind: kind, reason: reason, stack: stacktrace}}) do
+      Exception.format(kind, reason, stacktrace)
     end
 
     defp error_reason(%Conn{}), do: nil
@@ -213,6 +215,13 @@ if Code.ensure_loaded?(Phoenix) do
         [] -> nil
         [val | _] -> val
       end
+    end
+
+    defp log_level(nil, _conn), do: :info
+    defp log_level(level, _conn) when is_atom(level), do: level
+
+    defp log_level({mod, fun, args}, conn) when is_atom(mod) and is_atom(fun) and is_list(args) do
+      apply(mod, fun, [conn | args])
     end
   end
 end

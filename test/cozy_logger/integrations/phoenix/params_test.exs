@@ -1,7 +1,7 @@
-defmodule CozyLogger.PhoenixIntegration.ParamsTest do
+defmodule CozyLogger.Integrations.Phoenix.ParamsTest do
   use ExUnit.Case
 
-  alias CozyLogger.PhoenixIntegration.Params
+  alias CozyLogger.Integrations.Phoenix.Params
 
   describe "filter/2 with discard strategy" do
     test "in top level map" do

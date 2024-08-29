@@ -1,5 +1,5 @@
 if Code.ensure_loaded?(Phoenix) do
-  defmodule CozyLogger.PhoenixIntegration.Params do
+  defmodule CozyLogger.Integrations.Phoenix.Params do
     @moduledoc false
 
     @doc false
