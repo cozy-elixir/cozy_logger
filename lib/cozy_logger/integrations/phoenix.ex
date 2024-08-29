@@ -132,19 +132,15 @@ if Code.ensure_loaded?(Phoenix) do
                 request_path(conn)
               ]
             end,
-            logger_metadata(conn, config, %{duration: to_nanoseconds(duration)})
+            %{
+              http: http_metadata(conn, config, %{duration: to_nanoseconds(duration)})
+            }
           )
       end
     end
 
-    defp logger_metadata(conn, config, extras) do
-      %{
-        http: http_metadata(conn, config, extras)
-      }
-    end
-
     defp http_metadata(conn, config, extras) do
-      params_filter_fields = Keyword.get(config, :filter_params, ["password"])
+      params_filter_fields = Map.get(config, :filter_params, ["password"])
 
       %{
         connection_type: connection_type(conn),

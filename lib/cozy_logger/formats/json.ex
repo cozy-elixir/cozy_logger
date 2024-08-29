@@ -11,8 +11,7 @@ defmodule CozyLogger.Formats.JSON do
     :crash_reason,
     :initial_call,
     :report_cb,
-    :ansi_color,
-    :conn
+    :ansi_color
   ]
 
   alias Logger.Formatter
