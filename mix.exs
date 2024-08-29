@@ -2,7 +2,7 @@ defmodule CozyLogger.MixProject do
   use Mix.Project
 
   @version "1.0.1"
-  @description "Logging helpers, providing format functions of various formats and seamless integrations with other libraries."
+  @description "Logger helpers, providing format functions of various formats and seamless integrations with other libraries."
   @source_url "https://github.com/cozy-elixir/cozy_logger"
 
   def project do
@@ -47,7 +47,6 @@ defmodule CozyLogger.MixProject do
   defp docs do
     [
       extras: ["README.md"],
-      main: "readme",
       source_url: @source_url,
       source_ref: "v#{@version}"
     ]

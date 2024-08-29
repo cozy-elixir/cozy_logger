@@ -5,21 +5,27 @@
 
 <!-- MDOC -->
 
-Logging helpers, providing format functions of various formats and seamless integrations with other libraries.
+Logger helpers, providing format functions of various formats and seamless integrations with other libraries.
 
 ## Features
 
 - Formats
-  - [x] JSON
-  - ...
+  - JSON
 - Integrations
-  - [x] Phoenix
-  - [ ] Ecto
-  - ...
+  - Phoenix
+  - Oban
 
 ## Installation
 
-[Install it from Hex](https://hex.pm/packages/cozy_logger).
+Add `:package_name` to the list of dependencies in `mix.exs`:
+
+```elixir
+def deps do
+  [
+    {:cozy_logger, <requirement>}
+  ]
+end
+```
 
 ## Usage
 
