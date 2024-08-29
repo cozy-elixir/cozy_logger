@@ -65,17 +65,15 @@ if Code.ensure_loaded?(Oban) do
       state = metadata[:state]
 
       %{
-        oban_job: %{
-          args: job.args,
-          attempt: job.attempt,
-          id: job.id,
-          priority: job.priority,
-          queue: job.queue,
-          worker: job.worker,
-          state: state,
-          queue_time: queue_time,
-          duration: duration
-        }
+        args: job.args,
+        attempt: job.attempt,
+        id: job.id,
+        priority: job.priority,
+        queue: job.queue,
+        worker: job.worker,
+        state: state,
+        queue_time: queue_time,
+        duration: duration
       }
     end
   end
