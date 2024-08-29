@@ -1,28 +1,15 @@
-defmodule CozyLogger.JSON do
+defmodule CozyLogger.Formats.JSON do
   @moduledoc """
-  Formatting log messages as JSON.
-
-  ## Usage
-
-      # customize format message with this formatter.
-      config :logger, :default_formatter,
-        format: {#{inspect(__MODULE__)}, :format},
-        truncate: :infinity,
-        utc_log: true,
-        metadata: :all,
-        colors: [enabled: false]
-
+  Provides utilities to format logs as JSON.
   """
 
   @exclude_metadata_keys [
-    :erl_level,
+    :logger_formatter,
+    :error_logger,
     :gl,
     :pid,
-    :time,
     :crash_reason,
-    :error_logger,
     :initial_call,
-    :mfa,
     :report_cb,
     :ansi_color,
     :conn
@@ -32,12 +19,11 @@ defmodule CozyLogger.JSON do
 
   @spec format(atom, term, Logger.Formatter.date_time_ms(), keyword) :: IO.chardata()
   def format(level, message, timestamp, metadata) do
-    build_base_attrs(level, message, timestamp)
-    |> append_source_location(metadata)
-    |> append_metadata(metadata)
+    build({level, message, timestamp}, metadata)
+    |> append_source()
+    |> append_metadata()
     |> append_hostname()
-    |> exclude_keys()
-    |> encode!()
+    |> encode!(pretty: true)
     |> append_new_line()
   rescue
     # This function must not fail. If it does, it will bring that particular logger instance down,
@@ -45,49 +31,50 @@ defmodule CozyLogger.JSON do
     _ ->
       message = "could not format: #{inspect({level, message, metadata})}"
 
-      build_base_attrs(:error, message, timestamp)
+      build({:critical, message, timestamp}, metadata)
       |> encode!()
       |> append_new_line()
   end
 
-  defp build_base_attrs(level, message, timestamp) do
-    %{
+  defp build({level, message, timestamp}, metadata) do
+    attrs = %{
       level: level,
-      message: to_string(message),
-      timestamp: format_timestamp(timestamp)
+      message: to_binary(message),
+      timestamp: to_iso8601(timestamp)
     }
+
+    metadata = Keyword.drop(metadata, [:time])
+
+    {attrs, metadata}
   end
 
-  defp format_timestamp({date, time}) do
-    to_string([Formatter.format_date(date), ?T, Formatter.format_time(time), ?Z])
+  defp append_source({attrs, metadata}) do
+    attrs =
+      Map.put(attrs, :source, %{
+        mfa: metadata[:mfa],
+        file: to_binary(metadata[:file]),
+        line: metadata[:line]
+      })
+
+    metadata = Keyword.drop(metadata, [:mfa, :file, :line, :module, :function])
+    {attrs, metadata}
   end
 
-  defp append_source_location(attrs, metadata) do
-    Map.merge(attrs, %{
-      file: metadata[:file],
-      module: metadata[:module],
-      function: metadata[:function],
-      line: metadata[:line]
-    })
+  defp append_metadata({attrs, metadata}) do
+    metadata = Keyword.drop(metadata, @exclude_metadata_keys)
+
+    attrs =
+      Enum.reduce(metadata, attrs, fn {key, value}, acc ->
+        Map.put_new(acc, key, value)
+      end)
+
+    {attrs, metadata}
   end
 
-  defp append_metadata(attrs, metadata) do
-    Enum.reduce(metadata, attrs, fn {key, value}, acc ->
-      Map.put_new(acc, key, value)
-    end)
-  end
-
-  defp append_hostname(attrs) do
-    Map.put(attrs, :hostname, hostname())
-  end
-
-  defp hostname() do
+  defp append_hostname({attrs, metadata}) do
     {:ok, hostname} = :inet.gethostname()
-    to_string(hostname)
-  end
-
-  defp exclude_keys(attrs) do
-    Map.drop(attrs, @exclude_metadata_keys)
+    attrs = Map.put(attrs, :hostname, to_binary(hostname))
+    {attrs, metadata}
   end
 
   # Encoding a term to JSON.
@@ -95,8 +82,8 @@ defmodule CozyLogger.JSON do
   # Uses `Jason` for the JSON encoding, but converts values that are not handled by `Jason`
   # before that, like tuples or PIDs.
   @doc false
-  def encode!(value, opts \\ []) do
-    value
+  def encode!({attrs, _metadata}, opts \\ []) do
+    attrs
     |> encode_value()
     |> Jason.encode_to_iodata!(opts)
   end
@@ -129,6 +116,13 @@ defmodule CozyLogger.JSON do
   defp encode_value(value) do
     value
   end
+
+  defp to_iso8601({date, time}) do
+    to_binary([Formatter.format_date(date), ?T, Formatter.format_time(time), ?Z])
+  end
+
+  defp to_binary(term) when is_list(term), do: :erlang.iolist_to_binary(term)
+  defp to_binary(term), do: term
 
   defp append_new_line(iodata) do
     [iodata, ?\n]
